@@ -1,0 +1,35 @@
+# Theme
+theme = Rose Pine Moon
+
+# Font
+font-family = Hack Nerd Font
+font-size = 13
+font-feature = calt
+font-feature = clig
+font-feature = liga
+
+# Transparency
+background-opacity = 0.95
+background-blur-radius = 20
+
+# Padding
+window-padding-x = 10
+window-padding-y = 10,5
+
+# Window
+window-decoration = true
+
+# Cursor
+cursor-style = block
+cursor-style-blink = false
+mouse-hide-while-typing = true
+
+# Tab bar
+window-show-tab-bar = never
+
+# Dim inactive splits
+unfocused-split-opacity = 0.7
+
+# Keybindings
+keybind = ctrl+shift+alt+"=new_split:down
+keybind = ctrl+shift+alt+|=new_split:right
