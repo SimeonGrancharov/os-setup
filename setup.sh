@@ -10,6 +10,16 @@ else
   echo "Installed Homebrew"
 fi
 
+# Brew packages
+FORMULAE=(neovim tmux fzf ripgrep node nvm)
+CASKS=(ghostty font-hack-nerd-font)
+
+echo "Installing brew formulae..."
+brew install "${FORMULAE[@]}"
+
+echo "Installing brew casks..."
+brew install --cask "${CASKS[@]}"
+
 # Neovim config
 NVIM_CONFIG_DIR="$HOME/.config/nvim"
 
