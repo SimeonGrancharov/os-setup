@@ -20,6 +20,33 @@ brew install "${FORMULAE[@]}"
 echo "Installing brew casks..."
 brew install --cask "${CASKS[@]}"
 
+# Oh My Zsh
+if [ -d "$HOME/.oh-my-zsh" ]; then
+  echo "Oh My Zsh already installed, skipping"
+else
+  sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+  echo "Installed Oh My Zsh"
+fi
+
+# Spaceship prompt
+SPACESHIP_DIR="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/spaceship-prompt"
+
+if [ -d "$SPACESHIP_DIR" ]; then
+  echo "Spaceship prompt already installed, skipping"
+else
+  git clone https://github.com/spaceship-prompt/spaceship-prompt.git "$SPACESHIP_DIR" --depth=1
+  ln -s "$SPACESHIP_DIR/spaceship.zsh-theme" "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/spaceship.zsh-theme"
+  echo "Installed Spaceship prompt"
+fi
+
+# Zsh config
+if [ -e "$HOME/.zshrc" ]; then
+  echo "~/.zshrc already exists, backing up to ~/.zshrc.bak"
+  mv "$HOME/.zshrc" "$HOME/.zshrc.bak"
+fi
+ln -s "$SCRIPT_DIR/.zshrc" "$HOME/.zshrc"
+echo "Symlinked zsh config"
+
 # Neovim config
 NVIM_CONFIG_DIR="$HOME/.config/nvim"
 
