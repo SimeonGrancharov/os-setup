@@ -2,6 +2,14 @@
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
+# Homebrew
+if command -v brew &>/dev/null; then
+  echo "Homebrew already installed, skipping"
+else
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  echo "Installed Homebrew"
+fi
+
 # Neovim config
 NVIM_CONFIG_DIR="$HOME/.config/nvim"
 
