@@ -1,0 +1,18 @@
+# Machine-specific overrides
+# Copy this to ~/.zshrc.local and adjust for your machine
+
+# Java
+# export JAVA_HOME="$(brew --prefix openjdk@21)/libexec/openjdk.jdk/Contents/Home"
+# export PATH="$JAVA_HOME/bin:$PATH"
+
+# Python
+# export PATH="/opt/homebrew/opt/python@3.10/libexec/bin:$PATH"
+
+# Ruby
+# export PATH="/opt/homebrew/opt/ruby/bin:$PATH"
+# export PATH="/opt/homebrew/lib/ruby/gems/4.0.0/bin:$PATH"
+
+# Project-specific functions
+# preflight() {
+#   ...
+# }
