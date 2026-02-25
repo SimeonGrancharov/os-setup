@@ -49,3 +49,11 @@ else
   ln -s "$SCRIPT_DIR/ghostty-config" "$GHOSTTY_CONFIG_DIR/config"
   echo "Symlinked ghostty config"
 fi
+
+# Claude Code
+if command -v claude &>/dev/null; then
+  echo "Claude Code already installed, skipping"
+else
+  curl -fsSL https://claude.ai/install.sh | sh
+  echo "Installed Claude Code"
+fi
