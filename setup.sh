@@ -11,7 +11,7 @@ else
 fi
 
 # Brew packages
-FORMULAE=(neovim tmux fzf ripgrep node nvm)
+FORMULAE=(neovim tmux fzf ripgrep node nvm btop bat)
 CASKS=(ghostty font-hack-nerd-font)
 
 echo "Installing brew formulae..."
@@ -75,6 +75,17 @@ else
   mkdir -p "$GHOSTTY_CONFIG_DIR"
   ln -s "$SCRIPT_DIR/ghostty-config" "$GHOSTTY_CONFIG_DIR/config"
   echo "Symlinked ghostty config"
+fi
+
+# Btop config
+BTOP_CONFIG_DIR="$HOME/.config/btop"
+
+if [ -e "$BTOP_CONFIG_DIR/btop.conf" ]; then
+  echo "~/.config/btop/btop.conf already exists, skipping symlink"
+else
+  mkdir -p "$BTOP_CONFIG_DIR"
+  ln -s "$SCRIPT_DIR/btop.conf" "$BTOP_CONFIG_DIR/btop.conf"
+  echo "Symlinked btop config"
 fi
 
 # Claude Code
