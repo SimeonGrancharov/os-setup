@@ -13,7 +13,6 @@ source $ZSH/oh-my-zsh.sh
 # Vi mode
 bindkey -v
 bindkey '^R' history-incremental-search-backward
-
 # Aliases
 alias l="ls -al"
 alias v="nvim"
