@@ -35,4 +35,4 @@ keybind = ctrl+shift+alt+"=new_split:down
 keybind = ctrl+shift+alt+|=new_split:right
 
 # Auto-attach to tmux session on launch
-command = tmux new-session -A -s main
+command = /opt/homebrew/bin/tmux new-session -A -s main
