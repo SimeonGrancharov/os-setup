@@ -95,3 +95,11 @@ else
   curl -fsSL https://claude.ai/install.sh | sh
   echo "Installed Claude Code"
 fi
+
+# Keystroke Count
+if command -v keystroke-count &>/dev/null; then
+  echo "keystroke-count already installed, skipping"
+else
+  pip install git+https://github.com/SimeonGrancharov/keystroke_count.git
+  echo "Installed keystroke-count"
+fi
