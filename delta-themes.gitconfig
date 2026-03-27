@@ -1,0 +1,21 @@
+[delta "rose-pine"]
+    dark = true
+    syntax-theme = base16
+    line-numbers = true
+    side-by-side = false
+    file-style = "#e0def4" bold
+    file-decoration-style = "#6e6a86" ul
+    hunk-header-style = "#c4a7e7" italic
+    hunk-header-decoration-style = "#6e6a86" box
+    minus-style = syntax "#3a1631"
+    minus-emph-style = syntax "#562840"
+    plus-style = syntax "#1a2e32"
+    plus-emph-style = syntax "#264a50"
+    line-numbers-minus-style = "#eb6f92"
+    line-numbers-plus-style = "#9ccfd8"
+    line-numbers-zero-style = "#6e6a86"
+    line-numbers-left-style = "#6e6a86"
+    line-numbers-right-style = "#6e6a86"
+    commit-decoration-style = "#c4a7e7" box ul
+    commit-style = "#e0def4" bold
+    blame-palette = "#191724" "#1f1d2e" "#26233a"

@@ -11,7 +11,7 @@ else
 fi
 
 # Brew packages
-FORMULAE=(neovim tmux fzf ripgrep node nvm btop bat)
+FORMULAE=(neovim tmux fzf ripgrep node nvm btop bat git-delta)
 CASKS=(ghostty font-hack-nerd-font)
 
 echo "Installing brew formulae..."
@@ -88,6 +88,18 @@ else
   echo "Symlinked btop config"
 fi
 
+# Delta theme
+if grep -q "delta-themes.gitconfig" "$HOME/.gitconfig" 2>/dev/null; then
+  echo "Delta theme already included in .gitconfig, skipping"
+else
+  git config --global include.path "$SCRIPT_DIR/delta-themes.gitconfig"
+  git config --global delta.features "rose-pine"
+  git config --global delta.navigate true
+  git config --global core.pager "delta"
+  git config --global interactive.diffFilter "delta --color-only"
+  echo "Configured delta with rose-pine theme"
+fi
+
 # Claude Code
 if command -v claude &>/dev/null; then
   echo "Claude Code already installed, skipping"
@@ -108,6 +120,17 @@ if gh extension list | grep -q "dlvhdr/gh-dash"; then
 else
   gh extension install dlvhdr/gh-dash
   echo "Installed gh-dash"
+fi
+
+# gh-dash config
+GH_DASH_CONFIG_DIR="$HOME/.config/gh-dash"
+
+if [ -e "$GH_DASH_CONFIG_DIR/config.yml" ]; then
+  echo "~/.config/gh-dash/config.yml already exists, skipping symlink"
+else
+  mkdir -p "$GH_DASH_CONFIG_DIR"
+  ln -s "$SCRIPT_DIR/gh-dash-config.yml" "$GH_DASH_CONFIG_DIR/config.yml"
+  echo "Symlinked gh-dash config"
 fi
 
 if gh extension list | grep -q "gh-enhance"; then
