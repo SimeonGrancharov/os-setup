@@ -96,6 +96,27 @@ else
   echo "Installed Claude Code"
 fi
 
+# GitHub CLI Auth & Extensions
+if gh auth status &>/dev/null; then
+  echo "gh already authenticated, skipping"
+else
+  gh auth login
+fi
+
+if gh extension list | grep -q "dlvhdr/gh-dash"; then
+  echo "gh-dash already installed, skipping"
+else
+  gh extension install dlvhdr/gh-dash
+  echo "Installed gh-dash"
+fi
+
+if gh extension list | grep -q "gh-enhance"; then
+  echo "gh-enhance already installed, skipping"
+else
+  gh extension install gh-enhance
+  echo "Installed gh-enhance"
+fi
+
 # Keystroke Count
 if command -v keystroke-count &>/dev/null; then
   echo "keystroke-count already installed, skipping"
