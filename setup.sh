@@ -11,7 +11,7 @@ else
 fi
 
 # Brew packages
-FORMULAE=(neovim tmux fzf ripgrep node nvm btop bat git-delta)
+FORMULAE=(neovim tmux fzf ripgrep node nvm btop bat git-delta gh)
 CASKS=(ghostty font-hack-nerd-font)
 
 echo "Installing brew formulae..."
