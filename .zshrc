@@ -6,7 +6,7 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"
 [ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"
 
-plugins=(git)
+plugins=(git zsh-autosuggestions zsh-syntax-highlighting)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -14,10 +14,15 @@ source $ZSH/oh-my-zsh.sh
 bindkey -v
 bindkey '^R' history-incremental-search-backward
 # Aliases
-alias l="ls -al"
+alias l="eza -la --icons --git"
+alias ls="eza"
+alias tree="eza --tree"
 alias v="nvim"
 
 export PATH="$HOME/.local/bin:$PATH"
+
+# Zoxide
+eval "$(zoxide init zsh --cmd cd)"
 
 # Machine-specific overrides
 [ -f "$HOME/.zshrc.local" ] && source "$HOME/.zshrc.local"

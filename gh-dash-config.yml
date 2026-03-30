@@ -5,6 +5,18 @@ prSections:
       filters: is:open review-requested:@me
     - title: Involved
       filters: is:open involves:@me -author:@me
+    - title: For Review by Me
+      filters: is:open user-review-requested:@me
+      layout:
+      repo:
+        width: 6
+    - title: For Review by Team
+      filters: is:open review-requested:@me
+      layout:
+        repo:
+          width: 6
+    - title: Participated in
+      filters: commenter:@me
 issuesSections:
     - title: My Issues
       filters: is:open author:@me
@@ -80,6 +92,16 @@ keybindings:
     prs:
         - key: T
           command: gh enhance -R {{.RepoName}} {{.PrNumber}}
+        - key: C
+          command: printf "https://github.com/{{.RepoName}}/pull/{{.PrNumber}}" | pbcopy
+        - key: O
+          command: open "https://github.com/{{.RepoName}}/pull/{{.PrNumber}}"
+        - key: B
+          command: printf "{{.HeadRefName}}" | pbcopy
+        - key: X
+          command: gh pr checkout {{.PrNumber}} -R {{.RepoName}}
+        - key: R
+          command: gh run rerun --failed -R {{.RepoName}} {{.PrNumber}}
 repoPaths: {}
 theme:
     ui:

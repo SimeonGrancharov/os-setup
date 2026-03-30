@@ -11,7 +11,7 @@ else
 fi
 
 # Brew packages
-FORMULAE=(neovim tmux fzf ripgrep node nvm btop bat git-delta gh)
+FORMULAE=(neovim tmux fzf ripgrep node nvm btop bat git-delta gh zoxide eza markmarkoh/lt/lt)
 CASKS=(ghostty font-hack-nerd-font)
 
 echo "Installing brew formulae..."
@@ -37,6 +37,23 @@ else
   git clone https://github.com/spaceship-prompt/spaceship-prompt.git "$SPACESHIP_DIR" --depth=1
   ln -s "$SPACESHIP_DIR/spaceship.zsh-theme" "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/spaceship.zsh-theme"
   echo "Installed Spaceship prompt"
+fi
+
+# Zsh plugins
+ZSH_CUSTOM_DIR="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
+
+if [ -d "$ZSH_CUSTOM_DIR/plugins/zsh-autosuggestions" ]; then
+  echo "zsh-autosuggestions already installed, skipping"
+else
+  git clone https://github.com/zsh-users/zsh-autosuggestions "$ZSH_CUSTOM_DIR/plugins/zsh-autosuggestions"
+  echo "Installed zsh-autosuggestions"
+fi
+
+if [ -d "$ZSH_CUSTOM_DIR/plugins/zsh-syntax-highlighting" ]; then
+  echo "zsh-syntax-highlighting already installed, skipping"
+else
+  git clone https://github.com/zsh-users/zsh-syntax-highlighting "$ZSH_CUSTOM_DIR/plugins/zsh-syntax-highlighting"
+  echo "Installed zsh-syntax-highlighting"
 fi
 
 # Zsh config
