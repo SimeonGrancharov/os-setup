@@ -42,8 +42,8 @@ notificationsSections:
     - title: Team Mentioned
       filters: reason:team-mention
 repo:
-    branchesRefetchIntervalSeconds: 30
-    prsRefetchIntervalSeconds: 60
+    branchesRefetchIntervalSeconds: 120
+    prsRefetchIntervalSeconds: 120
 defaults:
     preview:
         open: true
@@ -87,7 +87,7 @@ defaults:
             assignees:
                 width: 20
                 hidden: true
-    refetchIntervalMinutes: 30
+    refetchIntervalMinutes: 2
 keybindings:
     prs:
         - key: T
