@@ -12,13 +12,25 @@ fi
 
 # Brew packages
 FORMULAE=(neovim tmux fzf ripgrep node nvm btop bat git-delta gh zoxide eza markmarkoh/lt/lt)
-CASKS=(ghostty font-hack-nerd-font font-fira-code-nerd-font raycast)
+CASKS=(ghostty font-hack-nerd-font font-fira-code-nerd-font raycast arc)
 
 echo "Installing brew formulae..."
-brew install "${FORMULAE[@]}"
+for formula in "${FORMULAE[@]}"; do
+  if brew list "$formula" &>/dev/null; then
+    echo "$formula already installed, skipping"
+  else
+    brew install "$formula"
+  fi
+done
 
 echo "Installing brew casks..."
-brew install --cask "${CASKS[@]}"
+for cask in "${CASKS[@]}"; do
+  if brew list --cask "$cask" &>/dev/null; then
+    echo "$cask already installed, skipping"
+  else
+    brew install --cask "$cask"
+  fi
+done
 
 # Oh My Zsh
 if [ -d "$HOME/.oh-my-zsh" ]; then
