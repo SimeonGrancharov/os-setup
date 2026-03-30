@@ -12,7 +12,7 @@ fi
 
 # Brew packages
 FORMULAE=(neovim tmux fzf ripgrep node nvm btop bat git-delta gh zoxide eza markmarkoh/lt/lt)
-CASKS=(ghostty font-hack-nerd-font)
+CASKS=(ghostty font-hack-nerd-font font-fira-code-nerd-font raycast)
 
 echo "Installing brew formulae..."
 brew install "${FORMULAE[@]}"
