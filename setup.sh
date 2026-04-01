@@ -11,7 +11,7 @@ else
 fi
 
 # Brew packages
-FORMULAE=(neovim tmux fzf ripgrep node nvm btop bat git-delta gh zoxide eza)
+FORMULAE=(neovim tmux fzf ripgrep node nvm btop bat git-delta gh zoxide eza rust)
 CASKS=(ghostty font-hack-nerd-font font-fira-code-nerd-font raycast arc)
 
 echo "Installing brew formulae..."
@@ -22,6 +22,14 @@ for formula in "${FORMULAE[@]}"; do
     brew install "$formula"
   fi
 done
+
+# tree-sitter-cli (required by nvim-treesitter)
+if command -v tree-sitter &>/dev/null; then
+  echo "tree-sitter-cli already installed, skipping"
+else
+  cargo install --locked tree-sitter-cli
+  echo "Installed tree-sitter-cli"
+fi
 
 echo "Installing brew casks..."
 for cask in "${CASKS[@]}"; do

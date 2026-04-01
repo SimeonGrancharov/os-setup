@@ -19,7 +19,7 @@ alias ls="eza"
 alias tree="eza --tree"
 alias v="nvim"
 
-export PATH="$HOME/.local/bin:$PATH"
+export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$PATH"
 
 # Zoxide
 eval "$(zoxide init zsh --cmd cd)"
