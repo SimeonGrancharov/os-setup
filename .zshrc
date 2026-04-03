@@ -25,5 +25,8 @@ export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$PATH"
 # Zoxide
 eval "$(zoxide init zsh --cmd cd)"
 
+# thefuck
+eval "$(thefuck --alias)"
+
 # Machine-specific overrides
 [ -f "$HOME/.zshrc.local" ] && source "$HOME/.zshrc.local"
