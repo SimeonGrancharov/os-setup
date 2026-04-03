@@ -13,6 +13,7 @@ source $ZSH/oh-my-zsh.sh
 # Vi mode
 bindkey -v
 bindkey '^R' history-incremental-search-backward
+bindkey '\t' autosuggest-accept
 # Aliases
 alias l="eza -la --icons --git"
 alias ls="eza"

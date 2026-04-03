@@ -125,6 +125,29 @@ else
   echo "Symlinked btop config"
 fi
 
+# Bat config
+BAT_CONFIG_DIR="$HOME/.config/bat"
+
+if [ -e "$BAT_CONFIG_DIR/config" ]; then
+  echo "~/.config/bat/config already exists, skipping symlink"
+else
+  mkdir -p "$BAT_CONFIG_DIR"
+  ln -s "$SCRIPT_DIR/bat-config" "$BAT_CONFIG_DIR/config"
+  echo "Symlinked bat config"
+fi
+
+# Bat custom log syntax
+BAT_SYNTAXES_DIR="$BAT_CONFIG_DIR/syntaxes"
+
+if [ -e "$BAT_SYNTAXES_DIR/log.sublime-syntax" ]; then
+  echo "Bat log syntax already exists, skipping symlink"
+else
+  mkdir -p "$BAT_SYNTAXES_DIR"
+  ln -s "$SCRIPT_DIR/bat-log.sublime-syntax" "$BAT_SYNTAXES_DIR/log.sublime-syntax"
+  bat cache --build
+  echo "Symlinked bat log syntax"
+fi
+
 # Delta theme
 if grep -q "delta-themes.gitconfig" "$HOME/.gitconfig" 2>/dev/null; then
   echo "Delta theme already included in .gitconfig, skipping"

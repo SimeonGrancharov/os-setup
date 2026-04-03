@@ -1,0 +1,25 @@
+# Bat configuration — optimized for Java Spring server logs
+
+# Theme: Monokai — high contrast, great for distinguishing log levels
+# ERROR/WARN pop in red/yellow, DEBUG/INFO stay readable
+--theme="Monokai Extended"
+
+# Always show line numbers — essential for correlating log entries
+--style="numbers,changes,header-filename"
+
+# Wrap long lines instead of horizontal scroll — Spring logs get WIDE
+# (stack traces, request bodies, SQL queries)
+--wrap=auto
+
+# Tab width 4 — matches Java convention
+--tabs=4
+
+# Spring-specific config files get proper highlighting
+--map-syntax="application*.properties:Java Properties"
+--map-syntax="application*.yml:YAML"
+--map-syntax="bootstrap*.yml:YAML"
+--map-syntax="bootstrap*.properties:Java Properties"
+
+# Paging: use less with options good for log tailing
+# -R = raw control chars, -F = quit if fits on screen, -X = no clear on exit, -S = chop long lines toggle with arrow keys
+--pager="less -RFX"

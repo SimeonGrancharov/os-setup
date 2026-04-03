@@ -1,0 +1,75 @@
+%YAML 1.2
+---
+name: Log
+file_extensions:
+  - log
+  - out
+scope: source.log
+
+contexts:
+  main:
+    # ERROR level — red (keyword scope in Monokai)
+    - match: \b(ERROR|FATAL|SEVERE|CRITICAL)\b
+      scope: keyword.control.log
+
+    # WARN level — yellow (entity.name scope in Monokai)
+    - match: \b(WARN|WARNING)\b
+      scope: entity.name.function.log
+
+    # INFO level — green
+    - match: \bINFO\b
+      scope: string.log
+
+    # DEBUG/TRACE — subdued
+    - match: \b(DEBUG|TRACE)\b
+      scope: comment.log
+
+    # Timestamps
+    - match: '\d{4}-\d{2}-\d{2}[T ]\d{2}:\d{2}:\d{2}[\.,]?\d*'
+      scope: constant.numeric.log
+
+    # Java exception class names
+    - match: '([a-z][a-z0-9_]*\.)+[A-Z]\w*Exception\b'
+      scope: keyword.control.log
+
+    # Stack trace lines
+    - match: '^\s+at\s+'
+      scope: keyword.control.log
+
+    # HTTP methods — purple, pops against the rest
+    - match: \b(GET|POST|PUT|PATCH|DELETE|HEAD|OPTIONS)\b
+      scope: storage.type.log
+
+    # HTTP endpoints "/leases/collections" or /api/v1/... — cyan/blue
+    - match: '"(/[\w\-\./\{\}]*)"'
+      scope: support.function.log
+    - match: '(?<= )/[\w\-\./\{\}]+'
+      scope: support.function.log
+
+    # HTTP status codes
+    - match: \b[2]\d{2}\b
+      scope: string.log
+    - match: \b[4]\d{2}\b
+      scope: entity.name.function.log
+    - match: \b[5]\d{2}\b
+      scope: keyword.control.log
+
+    # Cubby banner — title in blue
+    - match: 'CUBBY SERVER STARTUP'
+      scope: support.function.log
+
+    # Cubby banner — ASCII art lines (yellow)
+    - match: '^\s*[(\\\/)_|]{2,}.*$'
+      scope: entity.name.function.log
+
+    # Cubby banner — tagline pieces
+    - match: 'So Hot!'
+      scope: keyword.control.log
+    - match: '>So Cool<'
+      scope: string.log
+    - match: 'So Cubby\.'
+      scope: storage.type.log
+
+    # Spring component markers like [DispatcherServlet], [main], [http-nio-8080-exec-1]
+    - match: '\[[\w\-\.]+\]'
+      scope: entity.name.tag.log
