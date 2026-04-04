@@ -26,7 +26,7 @@ export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$PATH"
 eval "$(zoxide init zsh --cmd cd)"
 
 # thefuck
-eval "$(thefuck --alias)"
+eval "$(thefuck --alias --enable-experimental-instant-mode)"
 
 # Machine-specific overrides
 [ -f "$HOME/.zshrc.local" ] && source "$HOME/.zshrc.local"
