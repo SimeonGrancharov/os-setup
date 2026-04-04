@@ -1,6 +1,7 @@
 #!/bin/bash
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+source "$SCRIPT_DIR/packages.sh"
 
 echo "⚠️  This will remove everything installed by setup.sh."
 read -p "Are you sure? (y/N) " -n 1 -r
@@ -23,12 +24,14 @@ remove_symlink() {
 
 echo ""
 echo "=== Removing symlinks ==="
-remove_symlink "$HOME/.zshrc"
-remove_symlink "$HOME/.config/nvim"
-remove_symlink "$HOME/.tmux.conf"
-remove_symlink "$HOME/.config/ghostty/config"
-remove_symlink "$HOME/.config/btop/btop.conf"
-remove_symlink "$HOME/.config/gh-dash/config.yml"
+for entry in "${PROGRAMS[@]}"; do
+  parse_program "$entry"
+  for config in "${PROG_CONFIGS[@]}"; do
+    [[ -z "$config" ]] && continue
+    parse_config "$config"
+    remove_symlink "$CONFIG_TARGET"
+  done
+done
 
 # Restore .zshrc backup if it exists
 if [ -f "$HOME/.zshrc.bak" ]; then
@@ -129,33 +132,38 @@ else
   echo "Oh My Zsh not installed, skipping"
 fi
 
-# Brew packages
+# Brew casks
 echo ""
 echo "=== Removing brew casks ==="
-CASKS=(ghostty font-hack-nerd-font font-fira-code-nerd-font raycast arc)
 if command -v brew &>/dev/null; then
-  for cask in "${CASKS[@]}"; do
-    if brew list --cask "$cask" &>/dev/null; then
-      brew uninstall --cask "$cask"
-      echo "Removed $cask"
+  for entry in "${PROGRAMS[@]}"; do
+    parse_program "$entry"
+    [[ "$PROG_TYPE" != "cask" ]] && continue
+
+    if brew list --cask "$PROG_NAME" &>/dev/null; then
+      brew uninstall --cask "$PROG_NAME"
+      echo "Removed $PROG_NAME"
     else
-      echo "$cask not installed, skipping"
+      echo "$PROG_NAME not installed, skipping"
     fi
   done
 else
   echo "Homebrew not installed, skipping cask removal"
 fi
 
+# Brew formulae
 echo ""
 echo "=== Removing brew formulae ==="
-FORMULAE=(neovim tmux fzf ripgrep node nvm btop bat git-delta gh zoxide eza markmarkoh/lt/lt)
 if command -v brew &>/dev/null; then
-  for formula in "${FORMULAE[@]}"; do
-    if brew list "$formula" &>/dev/null; then
-      brew uninstall "$formula"
-      echo "Removed $formula"
+  for entry in "${PROGRAMS[@]}"; do
+    parse_program "$entry"
+    [[ "$PROG_TYPE" != "formula" ]] && continue
+
+    if brew list "$PROG_NAME" &>/dev/null; then
+      brew uninstall "$PROG_NAME"
+      echo "Removed $PROG_NAME"
     else
-      echo "$formula not installed, skipping"
+      echo "$PROG_NAME not installed, skipping"
     fi
   done
 else

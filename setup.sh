@@ -1,6 +1,7 @@
 #!/bin/bash
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+source "$SCRIPT_DIR/packages.sh"
 
 # Homebrew
 if command -v brew &>/dev/null; then
@@ -10,16 +11,16 @@ else
   echo "Installed Homebrew"
 fi
 
-# Brew packages
-FORMULAE=(neovim tmux fzf ripgrep node nvm btop bat git-delta gh zoxide eza rust thefuck)
-CASKS=(ghostty font-hack-nerd-font font-fira-code-nerd-font raycast arc)
-
+# Brew formulae
 echo "Installing brew formulae..."
-for formula in "${FORMULAE[@]}"; do
-  if brew list "$formula" &>/dev/null; then
-    echo "$formula already installed, skipping"
+for entry in "${PROGRAMS[@]}"; do
+  parse_program "$entry"
+  [[ "$PROG_TYPE" != "formula" ]] && continue
+
+  if brew list "$PROG_NAME" &>/dev/null; then
+    echo "$PROG_NAME already installed, skipping"
   else
-    brew install "$formula"
+    brew install "$PROG_NAME"
   fi
 done
 
@@ -31,12 +32,16 @@ else
   echo "Installed tree-sitter-cli"
 fi
 
+# Brew casks
 echo "Installing brew casks..."
-for cask in "${CASKS[@]}"; do
-  if brew list --cask "$cask" &>/dev/null; then
-    echo "$cask already installed, skipping"
+for entry in "${PROGRAMS[@]}"; do
+  parse_program "$entry"
+  [[ "$PROG_TYPE" != "cask" ]] && continue
+
+  if brew list --cask "$PROG_NAME" &>/dev/null; then
+    echo "$PROG_NAME already installed, skipping"
   else
-    brew install --cask "$cask"
+    brew install --cask "$PROG_NAME"
   fi
 done
 
@@ -76,76 +81,39 @@ else
   echo "Installed zsh-syntax-highlighting"
 fi
 
-# Zsh config
+# Config symlinks
+echo "Creating config symlinks..."
+
+# Backup .zshrc if it exists (will be replaced by symlink)
 if [ -e "$HOME/.zshrc" ]; then
   echo "~/.zshrc already exists, backing up to ~/.zshrc.bak"
   mv "$HOME/.zshrc" "$HOME/.zshrc.bak"
 fi
-ln -s "$SCRIPT_DIR/.zshrc" "$HOME/.zshrc"
-echo "Symlinked zsh config"
 
-# Neovim config
-NVIM_CONFIG_DIR="$HOME/.config/nvim"
+BAT_SYNTAX_LINKED=false
+for entry in "${PROGRAMS[@]}"; do
+  parse_program "$entry"
+  for config in "${PROG_CONFIGS[@]}"; do
+    [[ -z "$config" ]] && continue
+    parse_config "$config"
 
-if [ -e "$NVIM_CONFIG_DIR" ]; then
-  echo "~/.config/nvim already exists, skipping symlink"
-else
-  mkdir -p "$HOME/.config"
-  ln -s "$SCRIPT_DIR/nvimconfig" "$NVIM_CONFIG_DIR"
-  echo "Symlinked nvim config"
-fi
+    if [ -e "$CONFIG_TARGET" ]; then
+      echo "$CONFIG_TARGET already exists, skipping"
+      continue
+    fi
 
-# Tmux config
-if [ -e "$HOME/.tmux.conf" ]; then
-  echo "~/.tmux.conf already exists, skipping symlink"
-else
-  ln -s "$SCRIPT_DIR/.tmux.conf" "$HOME/.tmux.conf"
-  echo "Symlinked tmux config"
-fi
+    mkdir -p "$(dirname "$CONFIG_TARGET")"
+    ln -s "$SCRIPT_DIR/$CONFIG_SOURCE" "$CONFIG_TARGET"
+    echo "Symlinked $CONFIG_SOURCE -> $CONFIG_TARGET"
 
-# Ghostty config
-GHOSTTY_CONFIG_DIR="$HOME/.config/ghostty"
+    if [[ "$CONFIG_TARGET" == *"bat/syntaxes"* ]]; then
+      BAT_SYNTAX_LINKED=true
+    fi
+  done
+done
 
-if [ -e "$GHOSTTY_CONFIG_DIR/config" ]; then
-  echo "~/.config/ghostty/config already exists, skipping symlink"
-else
-  mkdir -p "$GHOSTTY_CONFIG_DIR"
-  ln -s "$SCRIPT_DIR/ghostty-config" "$GHOSTTY_CONFIG_DIR/config"
-  echo "Symlinked ghostty config"
-fi
-
-# Btop config
-BTOP_CONFIG_DIR="$HOME/.config/btop"
-
-if [ -e "$BTOP_CONFIG_DIR/btop.conf" ]; then
-  echo "~/.config/btop/btop.conf already exists, skipping symlink"
-else
-  mkdir -p "$BTOP_CONFIG_DIR"
-  ln -s "$SCRIPT_DIR/btop.conf" "$BTOP_CONFIG_DIR/btop.conf"
-  echo "Symlinked btop config"
-fi
-
-# Bat config
-BAT_CONFIG_DIR="$HOME/.config/bat"
-
-if [ -e "$BAT_CONFIG_DIR/config" ]; then
-  echo "~/.config/bat/config already exists, skipping symlink"
-else
-  mkdir -p "$BAT_CONFIG_DIR"
-  ln -s "$SCRIPT_DIR/bat-config" "$BAT_CONFIG_DIR/config"
-  echo "Symlinked bat config"
-fi
-
-# Bat custom log syntax
-BAT_SYNTAXES_DIR="$BAT_CONFIG_DIR/syntaxes"
-
-if [ -e "$BAT_SYNTAXES_DIR/log.sublime-syntax" ]; then
-  echo "Bat log syntax already exists, skipping symlink"
-else
-  mkdir -p "$BAT_SYNTAXES_DIR"
-  ln -s "$SCRIPT_DIR/bat-log.sublime-syntax" "$BAT_SYNTAXES_DIR/log.sublime-syntax"
+if $BAT_SYNTAX_LINKED; then
   bat cache --build
-  echo "Symlinked bat log syntax"
 fi
 
 # Delta theme
@@ -180,17 +148,6 @@ if gh extension list | grep -q "dlvhdr/gh-dash"; then
 else
   gh extension install dlvhdr/gh-dash
   echo "Installed gh-dash"
-fi
-
-# gh-dash config
-GH_DASH_CONFIG_DIR="$HOME/.config/gh-dash"
-
-if [ -e "$GH_DASH_CONFIG_DIR/config.yml" ]; then
-  echo "~/.config/gh-dash/config.yml already exists, skipping symlink"
-else
-  mkdir -p "$GH_DASH_CONFIG_DIR"
-  ln -s "$SCRIPT_DIR/gh-dash-config.yml" "$GH_DASH_CONFIG_DIR/config.yml"
-  echo "Symlinked gh-dash config"
 fi
 
 if gh extension list | grep -q "gh-enhance"; then
