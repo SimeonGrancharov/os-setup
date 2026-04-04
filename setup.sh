@@ -2,91 +2,108 @@
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 source "$SCRIPT_DIR/packages.sh"
+source "$SCRIPT_DIR/log.sh"
+
+log_header "Setting up your machine"
 
 # Homebrew
+log_section "Homebrew"
 if command -v brew &>/dev/null; then
-  echo "Homebrew already installed, skipping"
+  log_skip "Homebrew already installed"
 else
+  log_info "Installing Homebrew..."
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-  echo "Installed Homebrew"
+  log_success "Installed Homebrew"
 fi
 
 # Brew formulae
-echo "Installing brew formulae..."
+log_section "Brew formulae"
 for entry in "${PROGRAMS[@]}"; do
   parse_program "$entry"
   [[ "$PROG_TYPE" != "formula" ]] && continue
 
   if brew list "$PROG_NAME" &>/dev/null; then
-    echo "$PROG_NAME already installed, skipping"
+    log_skip "$PROG_NAME already installed"
   else
+    log_info "Installing $PROG_NAME..."
     brew install "$PROG_NAME"
+    log_success "Installed $PROG_NAME"
   fi
 done
 
 # tree-sitter-cli (required by nvim-treesitter)
+log_section "tree-sitter-cli"
 if command -v tree-sitter &>/dev/null; then
-  echo "tree-sitter-cli already installed, skipping"
+  log_skip "tree-sitter-cli already installed"
 else
+  log_info "Installing tree-sitter-cli..."
   cargo install --locked tree-sitter-cli
-  echo "Installed tree-sitter-cli"
+  log_success "Installed tree-sitter-cli"
 fi
 
 # Brew casks
-echo "Installing brew casks..."
+log_section "Brew casks"
 for entry in "${PROGRAMS[@]}"; do
   parse_program "$entry"
   [[ "$PROG_TYPE" != "cask" ]] && continue
 
   if brew list --cask "$PROG_NAME" &>/dev/null; then
-    echo "$PROG_NAME already installed, skipping"
+    log_skip "$PROG_NAME already installed"
   else
+    log_info "Installing $PROG_NAME..."
     brew install --cask "$PROG_NAME"
+    log_success "Installed $PROG_NAME"
   fi
 done
 
 # Oh My Zsh
+log_section "Oh My Zsh"
 if [ -d "$HOME/.oh-my-zsh" ]; then
-  echo "Oh My Zsh already installed, skipping"
+  log_skip "Oh My Zsh already installed"
 else
+  log_info "Installing Oh My Zsh..."
   sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
-  echo "Installed Oh My Zsh"
+  log_success "Installed Oh My Zsh"
 fi
 
 # Spaceship prompt
+log_section "Spaceship prompt"
 SPACESHIP_DIR="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/spaceship-prompt"
 
 if [ -d "$SPACESHIP_DIR" ]; then
-  echo "Spaceship prompt already installed, skipping"
+  log_skip "Spaceship prompt already installed"
 else
+  log_info "Installing Spaceship prompt..."
   git clone https://github.com/spaceship-prompt/spaceship-prompt.git "$SPACESHIP_DIR" --depth=1
   ln -s "$SPACESHIP_DIR/spaceship.zsh-theme" "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/spaceship.zsh-theme"
-  echo "Installed Spaceship prompt"
+  log_success "Installed Spaceship prompt"
 fi
 
 # Zsh plugins
+log_section "Zsh plugins"
 ZSH_CUSTOM_DIR="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
 
 if [ -d "$ZSH_CUSTOM_DIR/plugins/zsh-autosuggestions" ]; then
-  echo "zsh-autosuggestions already installed, skipping"
+  log_skip "zsh-autosuggestions already installed"
 else
+  log_info "Installing zsh-autosuggestions..."
   git clone https://github.com/zsh-users/zsh-autosuggestions "$ZSH_CUSTOM_DIR/plugins/zsh-autosuggestions"
-  echo "Installed zsh-autosuggestions"
+  log_success "Installed zsh-autosuggestions"
 fi
 
 if [ -d "$ZSH_CUSTOM_DIR/plugins/zsh-syntax-highlighting" ]; then
-  echo "zsh-syntax-highlighting already installed, skipping"
+  log_skip "zsh-syntax-highlighting already installed"
 else
+  log_info "Installing zsh-syntax-highlighting..."
   git clone https://github.com/zsh-users/zsh-syntax-highlighting "$ZSH_CUSTOM_DIR/plugins/zsh-syntax-highlighting"
-  echo "Installed zsh-syntax-highlighting"
+  log_success "Installed zsh-syntax-highlighting"
 fi
 
 # Config symlinks
-echo "Creating config symlinks..."
+log_section "Config symlinks"
 
-# Backup .zshrc if it exists (will be replaced by symlink)
 if [ -e "$HOME/.zshrc" ]; then
-  echo "~/.zshrc already exists, backing up to ~/.zshrc.bak"
+  log_warn "~/.zshrc exists, backing up to ~/.zshrc.bak"
   mv "$HOME/.zshrc" "$HOME/.zshrc.bak"
 fi
 
@@ -98,13 +115,13 @@ for entry in "${PROGRAMS[@]}"; do
     parse_config "$config"
 
     if [ -e "$CONFIG_TARGET" ]; then
-      echo "$CONFIG_TARGET already exists, skipping"
+      log_skip "$CONFIG_TARGET already exists"
       continue
     fi
 
     mkdir -p "$(dirname "$CONFIG_TARGET")"
     ln -s "$SCRIPT_DIR/$CONFIG_SOURCE" "$CONFIG_TARGET"
-    echo "Symlinked $CONFIG_SOURCE -> $CONFIG_TARGET"
+    log_success "Symlinked $CONFIG_SOURCE -> $CONFIG_TARGET"
 
     if [[ "$CONFIG_TARGET" == *"bat/syntaxes"* ]]; then
       BAT_SYNTAX_LINKED=true
@@ -117,50 +134,62 @@ if $BAT_SYNTAX_LINKED; then
 fi
 
 # Delta theme
+log_section "Delta theme"
 if grep -q "delta-themes.gitconfig" "$HOME/.gitconfig" 2>/dev/null; then
-  echo "Delta theme already included in .gitconfig, skipping"
+  log_skip "Delta theme already configured"
 else
+  log_info "Configuring delta with rose-pine theme..."
   git config --global include.path "$SCRIPT_DIR/delta-themes.gitconfig"
   git config --global delta.features "rose-pine"
   git config --global delta.navigate true
   git config --global core.pager "delta"
   git config --global interactive.diffFilter "delta --color-only"
-  echo "Configured delta with rose-pine theme"
+  log_success "Configured delta with rose-pine theme"
 fi
 
 # Claude Code
+log_section "Claude Code"
 if command -v claude &>/dev/null; then
-  echo "Claude Code already installed, skipping"
+  log_skip "Claude Code already installed"
 else
+  log_info "Installing Claude Code..."
   curl -fsSL https://claude.ai/install.sh | sh
-  echo "Installed Claude Code"
+  log_success "Installed Claude Code"
 fi
 
 # GitHub CLI Auth & Extensions
+log_section "GitHub CLI"
 if gh auth status &>/dev/null; then
-  echo "gh already authenticated, skipping"
+  log_skip "gh already authenticated"
 else
+  log_info "Authenticating with GitHub CLI..."
   gh auth login
 fi
 
 if gh extension list | grep -q "dlvhdr/gh-dash"; then
-  echo "gh-dash already installed, skipping"
+  log_skip "gh-dash already installed"
 else
+  log_info "Installing gh-dash..."
   gh extension install dlvhdr/gh-dash
-  echo "Installed gh-dash"
+  log_success "Installed gh-dash"
 fi
 
 if gh extension list | grep -q "gh-enhance"; then
-  echo "gh-enhance already installed, skipping"
+  log_skip "gh-enhance already installed"
 else
+  log_info "Installing gh-enhance..."
   gh extension install gh-enhance
-  echo "Installed gh-enhance"
+  log_success "Installed gh-enhance"
 fi
 
 # Keystroke Count
+log_section "Keystroke Count"
 if command -v keystroke-count &>/dev/null; then
-  echo "keystroke-count already installed, skipping"
+  log_skip "keystroke-count already installed"
 else
+  log_info "Installing keystroke-count..."
   pip install git+https://github.com/SimeonGrancharov/keystroke_count.git
-  echo "Installed keystroke-count"
+  log_success "Installed keystroke-count"
 fi
+
+log_done "Setup complete"
