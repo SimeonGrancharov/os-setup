@@ -13,7 +13,6 @@ source $ZSH/oh-my-zsh.sh
 # Vi mode
 bindkey -v
 bindkey '^R' history-incremental-search-backward
-bindkey '\t' autosuggest-accept
 # Aliases
 alias l="eza -la --icons --git"
 alias ls="eza"
@@ -30,3 +29,12 @@ eval "$(thefuck --alias)"
 
 # Machine-specific overrides
 [ -f "$HOME/.zshrc.local" ] && source "$HOME/.zshrc.local"
+export PATH="/opt/homebrew/opt/python@3.11/libexec/bin:$PATH"
+
+# pnpm
+export PNPM_HOME="/Users/simeongrancharov/Library/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME/bin:"*) ;;
+  *) export PATH="$PNPM_HOME/bin:$PATH" ;;
+esac
+# pnpm end
