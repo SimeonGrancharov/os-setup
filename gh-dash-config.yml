@@ -1,6 +1,8 @@
 prSections:
     - title: My Pull Requests
       filters: is:open author:@me
+    - title: Assigned to Me
+      filters: is:open assignee:@me
     - title: Needs My Review
       filters: is:open review-requested:@me
     - title: Involved
@@ -17,6 +19,9 @@ prSections:
           width: 6
     - title: Participated in
       filters: commenter:@me
+    - title: All Time
+      filters: org:cubbystorage
+      limit: 50
 issuesSections:
     - title: My Issues
       filters: is:open author:@me
