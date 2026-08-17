@@ -12,7 +12,6 @@ source $ZSH/oh-my-zsh.sh
 
 # Vi mode
 bindkey -v
-bindkey '^R' history-incremental-search-backward
 # Aliases
 alias l="eza -la --icons --git"
 alias ls="eza"
@@ -20,21 +19,22 @@ alias tree="eza --tree"
 alias v="nvim"
 
 export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$PATH"
-
-# Zoxide
-eval "$(zoxide init zsh --cmd cd)"
-
-# thefuck
-eval "$(thefuck --alias)"
-
-# Machine-specific overrides
-[ -f "$HOME/.zshrc.local" ] && source "$HOME/.zshrc.local"
 export PATH="/opt/homebrew/opt/python@3.11/libexec/bin:$PATH"
 
 # pnpm
-export PNPM_HOME="/Users/simeongrancharov/Library/pnpm"
+export PNPM_HOME="$HOME/Library/pnpm"
 case ":$PATH:" in
   *":$PNPM_HOME/bin:"*) ;;
   *) export PATH="$PNPM_HOME/bin:$PATH" ;;
 esac
 # pnpm end
+
+# Machine-specific overrides
+[ -f "$HOME/.zshrc.local" ] && source "$HOME/.zshrc.local"
+
+# fzf shell integration: Ctrl-R fuzzy history, Ctrl-T file picker, Alt-C cd
+# (must come after vi mode so its bindings win)
+source <(fzf --zsh)
+
+# Zoxide (keep last — it wants to be initialized at the end of the file)
+eval "$(zoxide init zsh --cmd cd)"

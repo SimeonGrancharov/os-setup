@@ -16,7 +16,6 @@ PROGRAMS=(
   "formula|zoxide"
   "formula|eza"
   "formula|rust"
-  "formula|thefuck"
   "cask|ghostty|ghostty-config:$HOME/.config/ghostty/config"
   "cask|font-hack-nerd-font"
   "cask|font-fira-code-nerd-font"
