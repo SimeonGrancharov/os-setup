@@ -99,6 +99,18 @@ else
   log_success "Installed zsh-syntax-highlighting"
 fi
 
+# Tmux Plugin Manager
+log_section "Tmux Plugin Manager"
+TPM_DIR="$HOME/.tmux/plugins/tpm"
+
+if [ -d "$TPM_DIR" ]; then
+  log_skip "TPM already installed"
+else
+  log_info "Installing TPM..."
+  git clone https://github.com/tmux-plugins/tpm "$TPM_DIR" --depth=1
+  log_success "Installed TPM"
+fi
+
 # Config symlinks
 log_section "Config symlinks"
 
@@ -132,6 +144,12 @@ done
 if $BAT_SYNTAX_LINKED; then
   bat cache --build
 fi
+
+# Tmux plugins
+log_section "Tmux plugins"
+log_info "Installing tmux plugins..."
+"$TPM_DIR/bin/install_plugins"
+log_success "Installed tmux plugins"
 
 # Delta theme
 log_section "Delta theme"

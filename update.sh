@@ -86,6 +86,19 @@ else
   log_skip "zsh-syntax-highlighting not installed"
 fi
 
+# Tmux Plugin Manager
+log_section "Tmux Plugin Manager"
+TPM_DIR="$HOME/.tmux/plugins/tpm"
+if [ -d "$TPM_DIR" ]; then
+  log_info "Pulling latest TPM..."
+  (cd "$TPM_DIR" && git pull --rebase --quiet)
+  log_info "Updating tmux plugins..."
+  "$TPM_DIR/bin/update_plugins" all
+  log_success "Updated tmux plugins"
+else
+  log_skip "TPM not installed"
+fi
+
 # GitHub CLI extensions
 log_section "GitHub CLI extensions"
 if command -v gh &>/dev/null; then

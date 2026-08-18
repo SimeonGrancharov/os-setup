@@ -9,6 +9,7 @@ macOS development environment setup with automated installation and symlinked do
 - **Ghostty** terminal with Rose Pine Moon theme, transparency, and auto-launch into tmux
 - **Zsh** with Oh My Zsh, Spaceship prompt, Vi mode, autosuggestions, and syntax highlighting
 - **Tmux** with `Ctrl-A` prefix, vim-style navigation, seamless Neovim pane switching, and Rose Pine status bar
+- **TPM** (tmux plugin manager) with `tmux-sensible` and `tmux-agent-sidebar` plugins
 - **Machine-specific overrides** via `~/.zshrc.local` (see `.zshrc.local.example`)
 
 ### Editor
@@ -83,6 +84,8 @@ cd os-setup
 | `Ctrl-h/j/k/l` | Navigate panes (works across Neovim, no prefix) |
 | `prefix + H/J/K/L` | Resize panes |
 | `prefix + b t` | Btop popup |
+| `prefix + I` | Install tmux plugins (TPM) |
+| `prefix + U` | Update tmux plugins (TPM) |
 
 ## Theme
 

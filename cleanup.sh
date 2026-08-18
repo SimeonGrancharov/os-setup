@@ -89,6 +89,15 @@ else
   log_skip "Delta config not found in .gitconfig"
 fi
 
+# Tmux plugins
+log_section "Removing tmux plugins"
+if [ -d "$HOME/.tmux/plugins" ]; then
+  rm -rf "$HOME/.tmux/plugins"
+  log_success "Removed TPM and tmux plugins"
+else
+  log_skip "Tmux plugins not installed"
+fi
+
 # Zsh plugins
 log_section "Removing Zsh plugins"
 ZSH_CUSTOM_DIR="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
