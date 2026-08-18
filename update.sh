@@ -109,4 +109,47 @@ else
   log_skip "gh not installed"
 fi
 
+# Neovim config submodule
+log_section "Neovim config"
+if [ -d "$SCRIPT_DIR/nvimconfig/.git" ] || [ -f "$SCRIPT_DIR/nvimconfig/.git" ]; then
+  if [ -z "$(git -C "$SCRIPT_DIR/nvimconfig" status --porcelain)" ]; then
+    log_info "Pulling latest nvimconfig..."
+    git -C "$SCRIPT_DIR/nvimconfig" pull --rebase --quiet
+    log_success "Updated nvimconfig"
+  else
+    log_skip "nvimconfig has local changes, skipping pull"
+  fi
+else
+  log_skip "nvimconfig submodule not initialized"
+fi
+
+# Claude Code
+log_section "Claude Code"
+if command -v claude &>/dev/null; then
+  log_info "Updating Claude Code..."
+  claude update && log_success "Updated Claude Code" || log_skip "Claude Code already up-to-date"
+else
+  log_skip "Claude Code not installed"
+fi
+
+# tree-sitter-cli
+log_section "tree-sitter-cli"
+if command -v cargo &>/dev/null && command -v tree-sitter &>/dev/null; then
+  log_info "Updating tree-sitter-cli..."
+  cargo install --locked tree-sitter-cli --quiet
+  log_success "Updated tree-sitter-cli"
+else
+  log_skip "tree-sitter-cli not installed"
+fi
+
+# keystroke-count
+log_section "keystroke-count"
+if command -v keystroke-count &>/dev/null; then
+  log_info "Updating keystroke-count..."
+  pip install --upgrade --quiet git+https://github.com/SimeonGrancharov/keystroke_count.git
+  log_success "Updated keystroke-count"
+else
+  log_skip "keystroke-count not installed"
+fi
+
 log_done "Update complete"

@@ -114,7 +114,9 @@ fi
 # Config symlinks
 log_section "Config symlinks"
 
-if [ -e "$HOME/.zshrc" ]; then
+# Only back up a real file — on a re-run ~/.zshrc is already our symlink,
+# and backing that up would clobber the original backup
+if [ -e "$HOME/.zshrc" ] && [ ! -L "$HOME/.zshrc" ]; then
   log_warn "~/.zshrc exists, backing up to ~/.zshrc.bak"
   mv "$HOME/.zshrc" "$HOME/.zshrc.bak"
 fi
@@ -196,7 +198,7 @@ if gh extension list | grep -q "gh-enhance"; then
   log_skip "gh-enhance already installed"
 else
   log_info "Installing gh-enhance..."
-  gh extension install gh-enhance
+  gh extension install dlvhdr/gh-enhance
   log_success "Installed gh-enhance"
 fi
 

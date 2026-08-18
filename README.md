@@ -34,7 +34,6 @@ macOS development environment setup with automated installation and symlinked do
 | nvm | Node version manager |
 | rust | Rust toolchain |
 | tree-sitter-cli | Tree-sitter parser (for Neovim) |
-| thefuck | Command correction |
 | claude | Claude Code AI assistant |
 | keystroke-count | Keystroke tracking |
 
@@ -72,7 +71,6 @@ cd os-setup
 | `tree` | `eza --tree` |
 | `v` | `nvim` |
 | `cd` | `zoxide` (smart directory jumping) |
-| `fuck` | `thefuck` (correct previous command) |
 
 ## Key Tmux Bindings
 
